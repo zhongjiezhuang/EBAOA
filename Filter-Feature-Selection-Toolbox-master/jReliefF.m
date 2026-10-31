@@ -1,0 +1,25 @@
+function RF = jReliefF(feat,label,opts)
+% Parameter
+K = 3;
+
+if isfield(opts,'Nf'), num_feat = opts.Nf; end
+if isfield(opts,'K'), K = opts.K; end
+
+% % Convert format to categorical
+% label         = categorical(label); 
+% Relief-F Algorithm
+[idx, weight] = relieff(feat,label,K,'method','classification');
+% Select features based on ranking
+Sf            = idx(1:num_feat);
+sFeat         = feat(:, Sf); 
+% Store results 
+RF.sf = Sf; 
+RF.ff = sFeat; 
+RF.nf = num_feat;
+RF.f  = feat; 
+RF.l  = label;
+weight(weight<0)=0;
+weight(isnan(weight)) = 0;
+RF.s  = weight;
+end
+
